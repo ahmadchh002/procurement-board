@@ -1,0 +1,20 @@
+.toast-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2a1517;
+  border: 1px solid var(--red);
+  color: #ffb3b3;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  text-align: left;
+}

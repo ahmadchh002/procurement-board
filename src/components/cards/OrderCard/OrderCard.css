@@ -1,0 +1,85 @@
+.order-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 12px 11px;
+  cursor: grab;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.18s ease,
+    opacity 0.18s,
+    border-color 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.order-card:hover {
+  background: var(--card-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 9px rgba(49, 47, 39, 0.08);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.order-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.order-card.dragging {
+  opacity: 0.38;
+  cursor: grabbing;
+  transform: rotate(1deg) scale(0.98);
+}
+
+.order-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.order-card-id {
+  color: var(--muted);
+  font-size: 11px;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.order-card-title {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.order-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.order-card-amount {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-card {
+    transition: none;
+  }
+}

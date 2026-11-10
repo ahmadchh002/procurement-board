@@ -1,0 +1,46 @@
+.badge-tag {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
+  text-transform: capitalize;
+  letter-spacing: 0.1px;
+  border: 1px solid transparent;
+}
+
+.badge-tag.materials {
+  background: #29343a;
+  color: #a9c5d5;
+  border-color: #3a4a51;
+}
+
+.badge-tag.tools {
+  background: #393329;
+  color: #dfc28f;
+  border-color: #514638;
+}
+
+.badge-tag.urgent {
+  background: #3b2c29;
+  color: #e4a097;
+  border-color: #59403a;
+}
+
+.badge-director {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: #3b2b28;
+  color: #e3a097;
+  border: 1px solid #5b403a;
+}
+
+.badge-director.signed {
+  background: #29352d;
+  color: #a8c9ae;
+  border-color: #3d5142;
+}

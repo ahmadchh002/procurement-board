@@ -1,0 +1,167 @@
+.procurement-layout {
+  width: min(100%, 1720px);
+  height: 100vh;
+  height: 100dvh;
+  min-height: 460px;
+  margin: 0 auto;
+  padding: 24px 30px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.procurement-topbar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 54px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.procurement-topbar h1 {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 25px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.procurement-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.procurement-search {
+  width: min(28vw, 290px);
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #22231f;
+  color: var(--text);
+  font-size: 13px;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+
+.procurement-search::placeholder {
+  color: #858579;
+}
+
+.procurement-search:hover {
+  background: #292a25;
+}
+
+.procurement-search:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(131, 167, 189, 0.14);
+  outline: none;
+}
+
+.mobile-stage-tabs {
+  display: none;
+}
+
+.procurement-board-grid {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(4, minmax(255px, 1fr));
+  align-items: stretch;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto hidden;
+  padding: 2px 2px 8px;
+  scrollbar-color: #4a4b43 transparent;
+  scrollbar-width: thin;
+}
+
+@media (max-width: 1100px) {
+  .procurement-layout {
+    padding: 20px 20px 22px;
+  }
+
+  .procurement-board-grid {
+    grid-template-columns: repeat(4, minmax(270px, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .procurement-layout {
+    min-height: 440px;
+    padding: 16px 14px 18px;
+    gap: 18px;
+  }
+
+  .procurement-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 14px;
+  }
+
+  .procurement-tools {
+    width: 100%;
+  }
+
+  .mobile-stage-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    flex: 0 0 auto;
+    padding: 5px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--panel);
+  }
+
+  .mobile-stage-tab {
+    display: flex;
+    min-width: 0;
+    min-height: 48px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 5px 3px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .mobile-stage-tab[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+    background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+    color: var(--text);
+  }
+
+  .mobile-stage-count {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .procurement-search {
+    width: auto;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .procurement-board-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .procurement-board-grid .board-column:not(.mobile-active) {
+    display: none;
+  }
+}

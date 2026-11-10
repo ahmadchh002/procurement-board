@@ -1,0 +1,33 @@
+.quote-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+}
+
+.quote-box.best {
+  border-color: #4a6650;
+  background: #29322a;
+}
+
+.quote-pill {
+  font-size: 9px;
+  color: #a6c5a5;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-height: 14px;
+}
+
+.quote-price {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 2px 0;
+}
+
+.quote-meta {
+  color: var(--muted);
+  line-height: 1.45;
+}

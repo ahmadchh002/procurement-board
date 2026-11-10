@@ -1,0 +1,40 @@
+.cost-breakdown-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cost-breakdown-section h4 {
+  margin-top: 0;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.cost-table {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px 12px;
+  font-size: 12px;
+}
+
+.cost-label {
+  color: var(--muted);
+}
+
+.cost-val {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-total-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  border-top: 1px solid var(--line);
+  margin-top: 6px;
+  padding-top: 9px;
+  font-weight: 700;
+  font-size: 14px;
+}

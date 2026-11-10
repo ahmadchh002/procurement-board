@@ -1,0 +1,57 @@
+:root {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+  --bg: #191a18;
+  --panel: #22231f;
+  --card: #292a25;
+  --card-hover: #30312b;
+  --line: #3b3c35;
+  --text: #e8e6dc;
+  --muted: #a4a397;
+  --blue: #83a7bd;
+  --amber: #c9a36b;
+  --purple: #a697bd;
+  --green: #83a88d;
+  --red: #cf8176;
+  --radius: 9px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: #fff;
+  background: #526e7c;
+}

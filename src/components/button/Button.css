@@ -1,0 +1,39 @@
+.btn-base {
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  transition: background 0.18s, color 0.18s, transform 0.18s, filter 0.18s;
+}
+
+.btn-primary {
+  background: #526e7c;
+  color: #fff;
+  padding: 0 15px;
+  min-height: 40px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: #617f8e;
+}
+
+.btn-close {
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 7px;
+}
+
+.btn-close:hover {
+  background: #30312b;
+  color: var(--text);
+}
