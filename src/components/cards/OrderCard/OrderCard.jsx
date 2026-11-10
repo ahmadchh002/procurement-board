@@ -1,9 +1,9 @@
-import React from 'react';
+import { memo } from 'react';
 import Badge from '../../common/Badge/Badge';
 import { DIRECTOR_LIMIT } from '../../../utils/constants';
 import './OrderCard.css';
 
-export default function OrderCard({ order, isSelected, isDragging, onClick, onDragStart }) {
+function OrderCard({ order, isSelected, isDragging, onClick, onDragStart }) {
     const requiresSignoff = order.amount > DIRECTOR_LIMIT;
 
     return (
@@ -38,3 +38,5 @@ export default function OrderCard({ order, isSelected, isDragging, onClick, onDr
         </article>
     );
 }
+
+export default memo(OrderCard);

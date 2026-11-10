@@ -1,6 +1,6 @@
-import React from 'react';
+import { memo } from 'react';
 
-export default function ActivityItem({ item }) {
+function ActivityItem({ item }) {
     return (
         <div className={`activity-item ${item.isSystem ? 'system' : ''}`}>
             <div
@@ -17,3 +17,5 @@ export default function ActivityItem({ item }) {
         </div>
     );
 }
+
+export default memo(ActivityItem);

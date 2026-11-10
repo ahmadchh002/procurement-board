@@ -15,6 +15,12 @@
   letter-spacing: -0.02em;
 }
 
+.order-details-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .order-details-sub {
   grid-column: 1 / -1;
   color: var(--muted);
@@ -23,6 +29,39 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+}
+
+.order-director-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.director-signoff-action {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--amber) 45%, var(--line));
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--amber) 10%, var(--panel));
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.director-signoff-action:hover {
+  background: color-mix(in srgb, var(--amber) 18%, var(--panel));
+}
+
+.director-signoff-action:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
 }
 
 .order-details-body {
@@ -53,6 +92,11 @@
 }
 
 @media (max-width: 420px) {
+  .order-director-controls {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .quotes-grid {
     grid-template-columns: 1fr;
     gap: 6px;

@@ -1,35 +1,43 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { canMoveOrder } from "../utils/rules";
 
 export function useDragAndDrop(orders, setOrders, onRuleViolation) {
   const [draggedOrderId, setDraggedOrderId] = useState(null);
   const [activeDropColumn, setActiveDropColumn] = useState(null);
+  const ordersRef = useRef(orders);
+  const draggedOrderIdRef = useRef(null);
 
-  const handleDragStart = (e, orderId) => {
+  useEffect(() => {
+    ordersRef.current = orders;
+  }, [orders]);
+
+  const handleDragStart = useCallback((e, orderId) => {
+    draggedOrderIdRef.current = orderId;
     setDraggedOrderId(orderId);
     e.dataTransfer.setData("text/plain", orderId);
     e.dataTransfer.effectAllowed = "move";
-  };
+  }, []);
 
-  const handleDragOver = (e, stageId) => {
+  const handleDragOver = useCallback((e, stageId) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    if (activeDropColumn !== stageId) {
-      setActiveDropColumn(stageId);
-    }
-  };
+    setActiveDropColumn((activeStage) => (
+      activeStage === stageId ? activeStage : stageId
+    ));
+  }, []);
 
-  const handleDragLeave = () => {
+  const handleDragLeave = useCallback(() => {
     setActiveDropColumn(null);
-  };
+  }, []);
 
-  const handleDrop = (e, targetStage) => {
+  const handleDrop = useCallback((e, targetStage) => {
     e.preventDefault();
     setActiveDropColumn(null);
-    const orderId = e.dataTransfer.getData("text/plain") || draggedOrderId;
+    const orderId = e.dataTransfer.getData("text/plain") || draggedOrderIdRef.current;
+    draggedOrderIdRef.current = null;
     setDraggedOrderId(null);
 
-    const order = orders.find((o) => o.id === orderId);
+    const order = ordersRef.current.find((o) => o.id === orderId);
     if (!order) return;
 
     const validation = canMoveOrder(order, targetStage);
@@ -41,7 +49,7 @@ export function useDragAndDrop(orders, setOrders, onRuleViolation) {
     setOrders((prev) =>
       prev.map((o) => (o.id === orderId ? { ...o, stage: targetStage } : o)),
     );
-  };
+  }, [onRuleViolation, setOrders]);
 
   return {
     draggedOrderId,

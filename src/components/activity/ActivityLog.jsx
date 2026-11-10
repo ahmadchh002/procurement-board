@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import ActivityItem from './ActivityItem';
 import Spinner from '../common/Spinner/Spinner';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
@@ -7,14 +7,10 @@ import './ActivityLog.css';
 
 const PAGE_SIZE = 20;
 
-export default function ActivityLog({ orderId }) {
+function ActivityLog({ orderId }) {
     const allLogs = useMemo(() => generatePastActivity(orderId, 2500), [orderId]);
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const [loadingMore, setLoadingMore] = useState(false);
-
-    useEffect(() => {
-        setVisibleCount(PAGE_SIZE);
-    }, [orderId]);
 
     const loadMore = useCallback(() => {
         if (visibleCount >= allLogs.length || loadingMore) return;
@@ -49,3 +45,5 @@ export default function ActivityLog({ orderId }) {
         </div>
     );
 }
+
+export default memo(ActivityLog);
