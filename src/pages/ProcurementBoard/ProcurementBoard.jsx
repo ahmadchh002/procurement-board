@@ -6,14 +6,15 @@ import RequestForm from '../../components/board/RequestForm/RequestForm';
 import Toast from '../../components/common/Toast/Toast';
 import Button from '../../components/button/Button';
 import { DIRECTOR_LIMIT, STAGES } from '../../utils/constants';
-import { INITIAL_ORDERS } from '../../data/orders';
+import { loadPersistedOrders, savePersistedOrders } from '../../data/orderStorage';
 import { useDragAndDrop } from '../../hooks/useDragAndDrop';
 import './ProcurementBoard.css';
 
 export default function ProcurementBoard() {
-    const [orders, setOrders] = useState(INITIAL_ORDERS);
+    const [initialState] = useState(loadPersistedOrders);
+    const [orders, setOrders] = useState(initialState.orders);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [toastMessage, setToastMessage] = useState('');
+    const [toastMessage, setToastMessage] = useState(initialState.error ?? '');
     const [searchTerm, setSearchTerm] = useState('');
     const [activeMobileStage, setActiveMobileStage] = useState(STAGES[0].id);
     const [drawerMode, setDrawerMode] = useState(null);
@@ -23,6 +24,12 @@ export default function ProcurementBoard() {
         setTimeout(() => setToastMessage(''), 3500);
     }, []);
 
+    const commitOrders = useCallback((nextOrders) => {
+        setOrders(nextOrders);
+        const error = savePersistedOrders(nextOrders);
+        if (error) triggerToast(error);
+    }, [triggerToast]);
+
     const {
         draggedOrderId,
         activeDropColumn,
@@ -30,7 +37,7 @@ export default function ProcurementBoard() {
         handleDragOver,
         handleDragLeave,
         handleDrop
-    } = useDragAndDrop(orders, setOrders, triggerToast);
+    } = useDragAndDrop(orders, commitOrders, triggerToast);
 
     const searchKey = searchTerm.trim().toLowerCase();
     const stageOrders = useMemo(() => {
@@ -78,20 +85,20 @@ export default function ProcurementBoard() {
                 stage: 'pending',
             };
 
-            setOrders((currentOrders) => [...currentOrders, newOrder]);
+            commitOrders([...orders, newOrder]);
             setActiveMobileStage('pending');
             triggerToast(`${newOrder.id} created and added to Pending Review.`);
             closeDrawer();
             return;
         }
 
-        setOrders((currentOrders) => currentOrders.map((order) => (
+        commitOrders(orders.map((order) => (
             order.id === request.id ? { ...order, ...request } : order
         )));
         setSelectedOrder(request);
         setDrawerMode('details');
         triggerToast(`${request.id} updated.`);
-    }, [closeDrawer, drawerMode, orders, setOrders, triggerToast]);
+    }, [closeDrawer, commitOrders, drawerMode, orders, triggerToast]);
 
     const toggleDirectorSignoff = useCallback(() => {
         if (!selectedOrder || selectedOrder.amount <= DIRECTOR_LIMIT) return;
@@ -105,7 +112,7 @@ export default function ProcurementBoard() {
                 : {}),
         };
 
-        setOrders((currentOrders) => currentOrders.map((order) => (
+        commitOrders(orders.map((order) => (
             order.id === nextOrder.id ? nextOrder : order
         )));
         setSelectedOrder(nextOrder);
@@ -121,7 +128,7 @@ export default function ProcurementBoard() {
                 ? `${nextOrder.id} director sign-off revoked.`
                 : `${nextOrder.id} marked as director signed.`,
         );
-    }, [selectedOrder, setOrders, triggerToast]);
+    }, [commitOrders, orders, selectedOrder, triggerToast]);
 
     const returnToDetails = useCallback(() => setDrawerMode('details'), []);
     const openEditRequest = useCallback(() => setDrawerMode('edit'), []);

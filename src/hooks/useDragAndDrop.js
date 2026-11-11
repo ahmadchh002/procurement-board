@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { canMoveOrder } from "../utils/rules";
 
-export function useDragAndDrop(orders, setOrders, onRuleViolation) {
+export function useDragAndDrop(orders, onOrdersChange, onRuleViolation) {
   const [draggedOrderId, setDraggedOrderId] = useState(null);
   const [activeDropColumn, setActiveDropColumn] = useState(null);
   const ordersRef = useRef(orders);
@@ -46,10 +46,10 @@ export function useDragAndDrop(orders, setOrders, onRuleViolation) {
       return;
     }
 
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, stage: targetStage } : o)),
+    onOrdersChange(
+      ordersRef.current.map((o) => (o.id === orderId ? { ...o, stage: targetStage } : o)),
     );
-  }, [onRuleViolation, setOrders]);
+  }, [onOrdersChange, onRuleViolation]);
 
   return {
     draggedOrderId,
