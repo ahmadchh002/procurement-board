@@ -192,7 +192,7 @@ export default function ProcurementBoard() {
             <Toast message={toastMessage} />
 
             <Drawer isOpen={Boolean(drawerMode)} onClose={closeDrawer}>
-                {drawerMode === 'c4reate' && (
+                {drawerMode === 'create' && (
                     <RequestForm onCancel={closeDrawer} onSave={saveRequest} />
                 )}
                 {drawerMode === 'edit' && selectedOrder && (
