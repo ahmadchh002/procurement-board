@@ -6,15 +6,14 @@ import RequestForm from '../../components/board/RequestForm/RequestForm';
 import Toast from '../../components/common/Toast/Toast';
 import Button from '../../components/button/Button';
 import { DIRECTOR_LIMIT, STAGES } from '../../utils/constants';
-import { loadPersistedOrders, savePersistedOrders } from '../../data/orderStorage';
+import { getOrders, saveOrders } from '../../data/orderStorage';
 import { useDragAndDrop } from '../../hooks/useDragAndDrop';
 import './ProcurementBoard.css';
 
 export default function ProcurementBoard() {
-    const [initialState] = useState(loadPersistedOrders);
-    const [orders, setOrders] = useState(initialState.orders);
+    const [orders, setOrders] = useState(getOrders);
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [toastMessage, setToastMessage] = useState(initialState.error ?? '');
+    const [toastMessage, setToastMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [activeMobileStage, setActiveMobileStage] = useState(STAGES[0].id);
     const [drawerMode, setDrawerMode] = useState(null);
@@ -26,9 +25,8 @@ export default function ProcurementBoard() {
 
     const commitOrders = useCallback((nextOrders) => {
         setOrders(nextOrders);
-        const error = savePersistedOrders(nextOrders);
-        if (error) triggerToast(error);
-    }, [triggerToast]);
+        saveOrders(nextOrders);
+    }, []);
 
     const {
         draggedOrderId,
@@ -76,9 +74,11 @@ export default function ProcurementBoard() {
 
     const saveRequest = useCallback((request) => {
         if (drawerMode === 'create') {
-            const nextNumber = orders.reduce((highest, order) => (
-                Math.max(highest, Number(order.id.replace(/\D/g, '')) || 0)
-            ), 0) + 1;
+            const highestNumber = orders.reduce((highest, order) => {
+                const number = Number(order.id.replace(/\D/g, '')) || 0;
+                return Math.max(highest, number);
+            }, 0);
+            const nextNumber = highestNumber + 1;
             const newOrder = {
                 ...request,
                 id: `PR-${String(nextNumber).padStart(4, '0')}`,
@@ -92,9 +92,10 @@ export default function ProcurementBoard() {
             return;
         }
 
-        commitOrders(orders.map((order) => (
+        const updatedOrders = orders.map((order) => (
             order.id === request.id ? { ...order, ...request } : order
-        )));
+        ));
+        commitOrders(updatedOrders);
         setSelectedOrder(request);
         setDrawerMode('details');
         triggerToast(`${request.id} updated.`);
@@ -104,30 +105,30 @@ export default function ProcurementBoard() {
         if (!selectedOrder || selectedOrder.amount <= DIRECTOR_LIMIT) return;
 
         const isRevoking = selectedOrder.directorSigned;
+        const needsReturnToApproval = isRevoking
+            && ['po', 'delivered'].includes(selectedOrder.stage);
         const nextOrder = {
             ...selectedOrder,
             directorSigned: !isRevoking,
-            ...(isRevoking && ['po', 'delivered'].includes(selectedOrder.stage)
-                ? { stage: 'director' }
-                : {}),
+            stage: needsReturnToApproval ? 'director' : selectedOrder.stage,
         };
 
-        commitOrders(orders.map((order) => (
+        const updatedOrders = orders.map((order) => (
             order.id === nextOrder.id ? nextOrder : order
-        )));
+        ));
+        commitOrders(updatedOrders);
         setSelectedOrder(nextOrder);
 
-        if (isRevoking && nextOrder.stage === 'director') {
+        if (needsReturnToApproval) {
             setActiveMobileStage('director');
             triggerToast(`${nextOrder.id} returned to Director Approval for sign-off.`);
             return;
         }
 
-        triggerToast(
-            isRevoking
-                ? `${nextOrder.id} director sign-off revoked.`
-                : `${nextOrder.id} marked as director signed.`,
-        );
+        const message = isRevoking
+            ? 'director sign-off revoked.'
+            : 'marked as director signed.';
+        triggerToast(`${nextOrder.id} ${message}`);
     }, [commitOrders, orders, selectedOrder, triggerToast]);
 
     const returnToDetails = useCallback(() => setDrawerMode('details'), []);
@@ -191,7 +192,7 @@ export default function ProcurementBoard() {
             <Toast message={toastMessage} />
 
             <Drawer isOpen={Boolean(drawerMode)} onClose={closeDrawer}>
-                {drawerMode === 'create' && (
+                {drawerMode === 'c4reate' && (
                     <RequestForm onCancel={closeDrawer} onSave={saveRequest} />
                 )}
                 {drawerMode === 'edit' && selectedOrder && (

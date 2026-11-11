@@ -12,7 +12,7 @@ export function useInfiniteScroll(onIntersect, hasMore, isLoading) {
           onIntersect();
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0.3 },
     );
 
     observer.observe(sentinelRef.current);
