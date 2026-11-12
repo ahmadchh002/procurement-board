@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import CostBreakdown from '../../cards/CostBreakdown/CostBreakdown';
 import QuoteCard from '../../cards/QuoteCard/QuoteCard';
-import ActivityLog from '../../activity/ActivityLog';
 import Badge from '../../common/Badge/Badge';
 import Button from '../../button/Button';
 import { DIRECTOR_LIMIT } from '../../../utils/constants';
@@ -57,8 +56,6 @@ function OrderDetails({ order, onClose, onEdit, onToggleDirectorSignoff }) {
                         ))}
                     </div>
                 </div>
-
-                <ActivityLog key={order.id} orderId={order.id} />
             </div>
         </>
     );

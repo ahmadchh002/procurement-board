@@ -1,10 +1,9 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import OrderCard from '../../cards/OrderCard/OrderCard';
 import './Column.css';
 
 function Column({
     stage,
-    filterKey,
     isMobileActive,
     orders,
     isDragOver,
@@ -16,13 +15,7 @@ function Column({
     onDragLeave,
     onDrop
 }) {
-    const [pagination, setPagination] = useState({
-        filterKey,
-        visibleCount: 40,
-    });
     const total = orders.reduce((sum, o) => sum + o.amount, 0);
-    const visibleCount = pagination.filterKey === filterKey ? pagination.visibleCount : 40;
-    const visibleOrders = orders.slice(0, visibleCount);
 
     return (
         <section
@@ -41,7 +34,7 @@ function Column({
                 Total: ${total.toLocaleString()}
             </div>
             <div className="col-body">
-                {visibleOrders.map((order) => (
+                {orders.map((order) => (
                     <OrderCard
                         key={order.id}
                         order={order}
@@ -51,21 +44,6 @@ function Column({
                         onDragStart={onDragStart}
                     />
                 ))}
-                {visibleCount < orders.length && (
-                    <button
-                        className="order-list-more"
-                        type="button"
-                        onClick={() => setPagination((current) => ({
-                            filterKey,
-                            visibleCount: Math.min(
-                                (current.filterKey === filterKey ? current.visibleCount : 40) + 40,
-                                orders.length,
-                            ),
-                        }))}
-                    >
-                        Show more · {orders.length - visibleCount} remaining
-                    </button>
-                )}
             </div>
         </section>
     );

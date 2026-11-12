@@ -1,0 +1,67 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 9, 8, 0.66);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 90;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(440px, calc(100vw - 32px));
+    height: min(760px, calc(100dvh - 32px));
+    background: #22231f;
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    box-shadow: -10px 0 28px rgba(0, 0, 0, 0.34);
+    overflow: hidden;
+    z-index: 95;
+}
+
+.modal-content.open {
+    transform: translate(-50%, -50%);
+}
+
+.activity-modal-content {
+    display: flex;
+    grid-row: 1 / -1;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.activity-modal-content > .btn-close {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    z-index: 1;
+}
+
+.activity-modal-content .activity-log-head {
+    padding-right: 48px;
+}
+
+@media (max-width: 520px) {
+    .modal-content {
+        width: calc(100vw - 24px);
+        height: calc(100dvh - 24px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-overlay,
+    .modal-content {
+        transition: none;
+    }
+}

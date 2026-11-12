@@ -1,0 +1,116 @@
+.table-wrapper {
+  margin: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: auto;
+  height: calc(100% - 24px);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 860px;
+}
+
+.orders-table th {
+  position: sticky;
+  top: 0;
+  background: #131820;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  z-index: 2;
+}
+
+.sortable-th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-th:hover {
+  color: var(--text);
+}
+
+.orders-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(42, 51, 66, 0.6);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.orders-table tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.orders-table tbody tr:hover {
+  background: var(--card-hover);
+}
+
+.orders-table tbody tr.selected-row {
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.mono-id {
+  font-family: monospace;
+  color: var(--muted);
+}
+
+.row-title {
+  font-weight: 500;
+}
+
+.amount-cell {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted-cell {
+  color: var(--muted);
+}
+
+.status-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.table-stage-select {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text);
+  font-size: 13px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+.table-stage-select:hover,
+.table-stage-select:focus {
+  background: var(--bg);
+  border-color: var(--line);
+}
+
+.table-stage-select option {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.table-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
