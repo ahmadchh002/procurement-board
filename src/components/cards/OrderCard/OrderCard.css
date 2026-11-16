@@ -1,6 +1,7 @@
 .order-card {
   background: var(--card);
   border: 1px solid var(--line);
+  border-left: 1px solid var(--line) !important;
   border-radius: 8px;
   padding: 12px 12px 11px;
   cursor: grab;
@@ -23,8 +24,8 @@
 }
 
 .order-card.selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 1px var(--brand);
 }
 
 .order-card.dragging {
@@ -53,6 +54,7 @@
   font-size: 13px;
   line-height: 1.45;
   font-weight: 600;
+  color: var(--text);
 }
 
 .order-card-meta {

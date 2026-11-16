@@ -33,25 +33,6 @@
     transform: translate(-50%, -50%);
 }
 
-.activity-modal-content {
-    display: flex;
-    grid-row: 1 / -1;
-    min-height: 0;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.activity-modal-content > .btn-close {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    z-index: 1;
-}
-
-.activity-modal-content .activity-log-head {
-    padding-right: 48px;
-}
-
 @media (max-width: 520px) {
     .modal-content {
         width: calc(100vw - 24px);

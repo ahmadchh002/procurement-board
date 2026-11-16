@@ -5,25 +5,27 @@
   border-radius: 5px;
   text-transform: capitalize;
   letter-spacing: 0.1px;
-  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  color: var(--muted);
 }
 
 .badge-tag.materials {
-  background: #29343a;
-  color: #a9c5d5;
-  border-color: #3a4a51;
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 .badge-tag.tools {
-  background: #393329;
-  color: #dfc28f;
-  border-color: #514638;
+  background: rgba(168, 85, 247, 0.1);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.4);
 }
 
 .badge-tag.urgent {
-  background: #3b2c29;
-  color: #e4a097;
-  border-color: #59403a;
+  background: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.4);
 }
 
 .badge-director {

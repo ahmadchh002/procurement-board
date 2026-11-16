@@ -29,10 +29,23 @@ function ActivityLog({ orderId }) {
     return (
         <div className="activity-log-wrap">
             <div className="activity-log-head">
-                <span>Activity Log</span>
-                <span>{allLogs.length.toLocaleString()} entries</span>
+                <div className="activity-log-heading">
+                    <span className="activity-log-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 8v4l2.5 1.5M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" />
+                        </svg>
+                    </span>
+                    <div>
+                        <h2>Recent activity</h2>
+                        <p>A chronological record of procurement updates and decisions.</p>
+                    </div>
+                </div>
+                <span className="activity-log-count">
+                    <span aria-hidden="true" />
+                    {allLogs.length.toLocaleString()} entries
+                </span>
             </div>
-            <div className="activity-log-list">
+            <div className="activity-log-list" aria-label="Activity log entries">
                 {displayedLogs.map((log) => (
                     <ActivityItem key={log.id} item={log} />
                 ))}

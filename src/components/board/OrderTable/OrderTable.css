@@ -1,6 +1,6 @@
 .table-wrapper {
   margin: 12px;
-  background: var(--panel);
+  background: color-mix(in srgb, var(--accet) 90%, var(--panel));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: auto;

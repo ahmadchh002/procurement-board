@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Column from '../../components/board/Column/Column';
 import OrderTable from '../../components/board/OrderTable/OrderTable';
 import Modal from '../../components/common/modal/Modal';
@@ -6,20 +7,21 @@ import OrderDetails from '../../components/board/OrderDetails/OrderDetails';
 import RequestForm from '../../components/board/RequestForm/RequestForm';
 import Toast from '../../components/common/Toast/Toast';
 import Button from '../../components/button/Button';
-import { DIRECTOR_LIMIT, STAGES } from '../../utils/constants';
+import { DIRECTOR_LIMIT, STAGES, STAGE_PAGE_PATHS } from '../../utils/constants';
 import { canMoveOrder } from '../../utils/rules';
 import { getOrders, saveOrders } from '../../data/orderStorage';
 import { useDragAndDrop } from '../../hooks/useDragAndDrop';
 import './ProcurementBoard.css';
-import ActivityLog from '../../components/activity/ActivityLog';
 
-export default function ProcurementBoard() {
+export default function ProcurementBoard({ stagePageId }) {
+    const navigate = useNavigate();
+    const stagePage = STAGES.find((stage) => stage.id === stagePageId);
     const [orders, setOrders] = useState(getOrders);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [toastMessage, setToastMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeMobileStage, setActiveMobileStage] = useState(STAGES[0].id);
-    const [activeStageFilter, setActiveStageFilter] = useState('all');
+    const [activeMobileStage, setActiveMobileStage] = useState(stagePageId || STAGES[0].id);
+    const [activeStageFilter, setActiveStageFilter] = useState(stagePageId || 'all');
     const [modalMode, setModalMode] = useState(null);
     const [viewMode, setViewMode] = useState('board');
 
@@ -97,8 +99,8 @@ export default function ProcurementBoard() {
     }, []);
 
     const openActivityLog = useCallback(() => {
-        setModalMode('activity');
-    }, []);
+        navigate('/activitylog');
+    }, [navigate]);
 
     const saveRequest = useCallback((request) => {
         if (modalMode === 'create') {
@@ -166,7 +168,7 @@ export default function ProcurementBoard() {
     return (
         <div className="procurement-layout">
             <header className="procurement-topbar">
-                <h1>📦 Purchasing &amp; Approval Board</h1>
+                <h1>{stagePage ? `📦 ${stagePage.title}` : '📦 Purchasing & Approval Board'}</h1>
                 <div className="procurement-tools">
                     <input
                         className="procurement-search"
@@ -192,10 +194,29 @@ export default function ProcurementBoard() {
                     </div>
                     <Button variant="primary" onClick={openNewRequest}>+ New Request</Button>
                     <Button variant="primary" onClick={openActivityLog}>View Activity Log</Button>
+                    {stagePage && (
+                        <Button variant="primary" onClick={() => navigate('/')}>Back to Board</Button>
+                    )}
                 </div>
             </header>
 
-            {viewMode === 'board' && (
+            <nav className="stage-page-links" aria-label="Stage pages">
+                <span className="stage-page-links-label">Stage pages</span>
+                {STAGES.map((stage) => (
+                    <Link
+                        key={stage.id}
+                        className="stage-page-link"
+                        to={STAGE_PAGE_PATHS[stage.id]}
+                        aria-current={stage.id === stagePageId ? 'page' : undefined}
+                        style={{ '--accent': stage.accent }}
+                    >
+                        {stage.title}
+                        <span>{stageOrders[stage.id].length}</span>
+                    </Link>
+                ))}
+            </nav>
+
+            {!stagePage && viewMode === 'board' && (
                 <nav className="mobile-stage-tabs" aria-label="Order stages">
                     {STAGES.map((stage) => {
                         const count = stageOrders[stage.id].length;
@@ -220,48 +241,52 @@ export default function ProcurementBoard() {
                 </nav>
             )}
 
-            <nav
-                className={`stage-filter-tabs ${viewMode === 'table' ? 'stage-filter-tabs-table' : ''}`}
-                aria-label="Filter orders by stage"
-            >
+            {!stagePage && (
+                <nav
+                    className={`stage-filter-tabs ${viewMode === 'table' ? 'stage-filter-tabs-table' : ''}`}
+                    aria-label="Filter orders by stage"
+                >
+                <button
+                    className="stage-filter-tab"
+                    type="button"
+                    aria-pressed={activeStageFilter === 'all'}
+                    onClick={() => {
+                        setActiveStageFilter('all');
+                        setActiveMobileStage(STAGES[0].id);
+                    }}
+                >
+                    All <span>{filteredOrders.length}</span>
+                </button>
+                {STAGES.map((stage) => (
                     <button
+                        key={stage.id}
                         className="stage-filter-tab"
                         type="button"
-                        aria-pressed={activeStageFilter === 'all'}
+                        aria-pressed={activeStageFilter === stage.id}
                         onClick={() => {
-                            setActiveStageFilter('all');
-                            setActiveMobileStage(STAGES[0].id);
+                            setActiveStageFilter(stage.id);
+                            setActiveMobileStage(stage.id);
                         }}
+                        style={{ '--accent': stage.accent }}
                     >
-                        All <span>{filteredOrders.length}</span>
+                        {stage.title} <span>{stageOrders[stage.id].length}</span>
                     </button>
-                    {STAGES.map((stage) => (
-                        <button
-                            key={stage.id}
-                            className="stage-filter-tab"
-                            type="button"
-                            aria-pressed={activeStageFilter === stage.id}
-                            onClick={() => {
-                                setActiveStageFilter(stage.id);
-                                setActiveMobileStage(stage.id);
-                            }}
-                            style={{ '--accent': stage.accent }}
-                        >
-                            {stage.title} <span>{stageOrders[stage.id].length}</span>
-                        </button>
-                    ))}
-            </nav>
+                ))}
+                </nav>
+            )}
 
             {viewMode === 'board' ? (
-                <main className="procurement-board-grid">
+                <main className={`procurement-board-grid ${stagePage ? 'procurement-board-grid-single' : ''}`}>
                     {STAGES
-                        .filter((stage) => activeStageFilter === 'all' || stage.id === activeStageFilter)
+                        .filter((stage) => stagePage
+                            ? stage.id === stagePage.id
+                            : activeStageFilter === 'all' || stage.id === activeStageFilter)
                         .map((stage) => (
                             <Column
                                 key={stage.id}
                                 stage={stage}
                                 filterKey={searchKey}
-                                isMobileActive={activeMobileStage === stage.id}
+                                isMobileActive={stagePage ? true : activeMobileStage === stage.id}
                                 orders={stageOrders[stage.id]}
                                 isDragOver={activeDropColumn === stage.id}
                                 selectedOrderId={selectedOrder?.id}
@@ -277,13 +302,12 @@ export default function ProcurementBoard() {
             ) : (
                 <main className="procurement-table-view">
                     <OrderTable
-                        orders={stageFilteredOrders}
+                        orders={stagePage ? stageOrders[stagePage.id] : stageFilteredOrders}
                         selectedOrderId={selectedOrder?.id}
                         onOrderClick={openOrderDetails}
                         onStageChange={handleTableStageChange}
                     />
                 </main>
-
             )}
 
             <Toast message={toastMessage} />
@@ -302,12 +326,6 @@ export default function ProcurementBoard() {
                         onEdit={openEditRequest}
                         onToggleDirectorSignoff={toggleDirectorSignoff}
                     />
-                )}
-                {modalMode === 'activity' && (
-                    <div className="activity-modal-content">
-                        <Button variant="close" onClick={closeModal} ariaLabel="Close Activity Log">×</Button>
-                        <ActivityLog />
-                    </div>
                 )}
             </Modal>
         </div>

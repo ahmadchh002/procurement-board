@@ -9,9 +9,11 @@ function ActivityItem({ item }) {
             >
                 {item.avatar}
             </div>
-            <div>
-                <span className="activity-who">{item.author}</span>
-                <span className="activity-when">{item.time}</span>
+            <div className="activity-content">
+                <div className="activity-meta">
+                    <span className="activity-who">{item.author}</span>
+                    <span className="activity-when">{item.time}</span>
+                </div>
                 <p>{item.message}</p>
             </div>
         </div>
